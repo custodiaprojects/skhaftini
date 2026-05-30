@@ -1,0 +1,1641 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Skhaftini — We Grill, You Chill</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;900&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --fire: #E8450A;
+  --fire-light: #FF6B35;
+  --earth: #1A1208;
+  --earth-mid: #2D1F0E;
+  --earth-light: #4A3520;
+  --cream: #F5EDD8;
+  --cream-dark: #E8D8B8;
+  --gold: #D4A017;
+  --white: #FDFAF4;
+  --text-muted: #8A7A60;
+  --slot-max: 3;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Barlow', sans-serif;
+  background: var(--earth);
+  color: var(--cream);
+  overflow-x: hidden;
+}
+
+/* ── NAVIGATION ── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 1rem 2.5rem;
+  background: rgba(26,18,8,0.92);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(232,69,10,0.2);
+}
+.nav-logo {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 1.8rem; font-weight: 900;
+  letter-spacing: 0.08em; color: var(--cream);
+}
+.nav-logo span { color: var(--fire); }
+.nav-links { display: flex; gap: 2rem; align-items: center; }
+.nav-links a {
+  font-size: 0.85rem; font-weight: 600; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--cream-dark);
+  text-decoration: none; transition: color 0.2s;
+}
+.nav-links a:hover { color: var(--fire-light); }
+.nav-cta {
+  background: var(--fire); color: var(--white) !important;
+  padding: 0.55rem 1.4rem; border-radius: 2px;
+}
+.nav-cta:hover { background: var(--fire-light); color: var(--white) !important; }
+
+/* ── PAGE SYSTEM ── */
+.page { display: none; min-height: 100vh; padding-top: 70px; }
+.page.active { display: block; }
+
+/* ══════════════════════════════════
+   HOME PAGE
+══════════════════════════════════ */
+
+/* HERO */
+.hero {
+  min-height: 92vh;
+  display: flex; flex-direction: column; justify-content: center;
+  position: relative; overflow: hidden;
+  padding: 4rem 2.5rem 3rem;
+}
+.hero-bg {
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse 60% 50% at 75% 50%, rgba(232,69,10,0.18) 0%, transparent 70%),
+    radial-gradient(ellipse 40% 60% at 20% 80%, rgba(212,160,23,0.08) 0%, transparent 60%),
+    linear-gradient(160deg, #1A1208 0%, #2D1F0E 60%, #1A1208 100%);
+}
+.hero-grid {
+  position: absolute; inset: 0; opacity: 0.04;
+  background-image: repeating-linear-gradient(0deg, var(--cream) 0, var(--cream) 1px, transparent 1px, transparent 60px),
+    repeating-linear-gradient(90deg, var(--cream) 0, var(--cream) 1px, transparent 1px, transparent 60px);
+}
+.hero-content { position: relative; max-width: 720px; }
+.hero-eyebrow {
+  font-size: 0.75rem; font-weight: 600; letter-spacing: 0.25em;
+  text-transform: uppercase; color: var(--fire);
+  margin-bottom: 1.2rem;
+  display: flex; align-items: center; gap: 0.8rem;
+}
+.hero-eyebrow::before {
+  content: ''; width: 2rem; height: 2px; background: var(--fire);
+}
+.hero-title {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: clamp(3.5rem, 10vw, 7rem);
+  font-weight: 900; line-height: 0.92;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+  margin-bottom: 1.5rem;
+}
+.hero-title .accent { color: var(--fire); display: block; }
+.hero-subtitle {
+  font-size: 1.15rem; line-height: 1.65;
+  color: var(--cream-dark); max-width: 520px;
+  margin-bottom: 2.5rem;
+}
+.hero-price-badge {
+  display: inline-flex; align-items: baseline; gap: 0.4rem;
+  background: var(--fire); padding: 0.6rem 1.2rem; border-radius: 2px;
+  margin-bottom: 2.5rem;
+}
+.hero-price-badge .amount {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 2rem; font-weight: 900; color: var(--white);
+}
+.hero-price-badge .label {
+  font-size: 0.8rem; font-weight: 600; color: rgba(255,255,255,0.8);
+  text-transform: uppercase; letter-spacing: 0.1em;
+}
+.hero-actions { display: flex; gap: 1rem; flex-wrap: wrap; }
+.btn-primary {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 1rem; font-weight: 700; letter-spacing: 0.12em;
+  text-transform: uppercase;
+  background: var(--fire); color: var(--white);
+  border: none; padding: 0.85rem 2rem; border-radius: 2px;
+  cursor: pointer; transition: all 0.2s; text-decoration: none;
+  display: inline-block;
+}
+.btn-primary:hover { background: var(--fire-light); transform: translateY(-1px); }
+.btn-secondary {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 1rem; font-weight: 700; letter-spacing: 0.12em;
+  text-transform: uppercase;
+  background: transparent; color: var(--cream);
+  border: 1.5px solid rgba(245,237,216,0.3); padding: 0.85rem 2rem; border-radius: 2px;
+  cursor: pointer; transition: all 0.2s; text-decoration: none;
+  display: inline-block;
+}
+.btn-secondary:hover { border-color: var(--cream); }
+.hero-stats {
+  position: absolute; right: 2.5rem; top: 50%; transform: translateY(-50%);
+  display: flex; flex-direction: column; gap: 1.5rem;
+}
+.hero-stat {
+  text-align: right;
+  border-right: 2px solid var(--fire);
+  padding-right: 1rem;
+}
+.hero-stat .num {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 2.2rem; font-weight: 900; color: var(--cream);
+  line-height: 1;
+}
+.hero-stat .desc {
+  font-size: 0.72rem; color: var(--text-muted);
+  text-transform: uppercase; letter-spacing: 0.1em;
+  max-width: 140px;
+}
+
+/* SECTION SHARED */
+section { padding: 5rem 2.5rem; }
+.section-label {
+  font-size: 0.72rem; font-weight: 600; letter-spacing: 0.25em;
+  text-transform: uppercase; color: var(--fire);
+  margin-bottom: 1rem;
+  display: flex; align-items: center; gap: 0.7rem;
+}
+.section-label::before { content: ''; width: 1.5rem; height: 2px; background: var(--fire); }
+.section-title {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-weight: 900; text-transform: uppercase;
+  line-height: 1; margin-bottom: 1rem;
+}
+
+/* HOW IT WORKS */
+.how-it-works { background: var(--earth-mid); }
+.steps {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 0; margin-top: 3rem;
+  border: 1px solid rgba(245,237,216,0.08);
+}
+.step {
+  padding: 2.5rem 2rem;
+  border-right: 1px solid rgba(245,237,216,0.08);
+  position: relative;
+}
+.step:last-child { border-right: none; }
+.step-num {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 5rem; font-weight: 900; line-height: 1;
+  color: rgba(232,69,10,0.15);
+  position: absolute; top: 1rem; right: 1.5rem;
+}
+.step-icon { font-size: 1.5rem; margin-bottom: 1rem; }
+.step h3 {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 1.3rem; font-weight: 700; text-transform: uppercase;
+  color: var(--cream); margin-bottom: 0.5rem;
+}
+.step p { font-size: 0.9rem; color: var(--text-muted); line-height: 1.6; }
+
+/* MENU SECTION */
+.menu-section { background: var(--earth); }
+.menu-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 1px; background: rgba(245,237,216,0.08);
+  margin-top: 3rem;
+  border: 1px solid rgba(245,237,216,0.08);
+}
+.menu-col {
+  background: var(--earth); padding: 2rem 1.5rem;
+}
+.menu-col-title {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 0.75rem; font-weight: 700; letter-spacing: 0.2em;
+  text-transform: uppercase; color: var(--fire);
+  margin-bottom: 1.2rem; padding-bottom: 0.8rem;
+  border-bottom: 1px solid rgba(232,69,10,0.3);
+}
+.menu-item {
+  font-size: 0.95rem; color: var(--cream-dark);
+  padding: 0.5rem 0;
+  border-bottom: 1px solid rgba(245,237,216,0.06);
+  display: flex; align-items: center; gap: 0.5rem;
+}
+.menu-item::before {
+  content: ''; width: 4px; height: 4px; border-radius: 50%;
+  background: var(--fire); flex-shrink: 0;
+}
+
+/* FUEL */
+.fuel-section { background: var(--earth-mid); }
+.fuel-grid {
+  display: grid; grid-template-columns: repeat(2, 1fr);
+  gap: 1px; background: rgba(245,237,216,0.06);
+  margin-top: 3rem;
+  border: 1px solid rgba(245,237,216,0.08);
+}
+.fuel-card { background: var(--earth-mid); padding: 2.5rem 2rem; }
+.fuel-letter {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 3.5rem; font-weight: 900;
+  color: var(--fire); line-height: 1; margin-bottom: 0.5rem;
+}
+.fuel-card h3 {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 1.2rem; font-weight: 700; text-transform: uppercase;
+  color: var(--cream); margin-bottom: 0.8rem;
+}
+.fuel-card p { font-size: 0.9rem; color: var(--text-muted); line-height: 1.7; }
+
+/* STATS BAR */
+.stats-bar {
+  background: var(--fire);
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  gap: 0;
+}
+.stat-item {
+  padding: 2.5rem 2rem; text-align: center;
+  border-right: 1px solid rgba(255,255,255,0.15);
+}
+.stat-item:last-child { border-right: none; }
+.stat-num {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 2.8rem; font-weight: 900; color: var(--white);
+  display: block;
+}
+.stat-desc { font-size: 0.78rem; color: rgba(255,255,255,0.75); text-transform: uppercase; letter-spacing: 0.1em; }
+
+/* CTA SECTION */
+.cta-section {
+  background: var(--earth);
+  text-align: center; padding: 6rem 2.5rem;
+  position: relative; overflow: hidden;
+}
+.cta-section::before {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(ellipse 60% 80% at 50% 50%, rgba(232,69,10,0.12) 0%, transparent 70%);
+}
+.cta-section .section-title { font-size: clamp(2.5rem, 7vw, 5rem); }
+.cta-contact { display: flex; gap: 2rem; justify-content: center; margin-top: 2rem; flex-wrap: wrap; }
+.contact-item { font-size: 1rem; color: var(--text-muted); display: flex; align-items: center; gap: 0.5rem; }
+.contact-item strong { color: var(--cream); }
+
+/* FOOTER */
+footer {
+  background: var(--earth-mid); padding: 2rem 2.5rem;
+  display: flex; justify-content: space-between; align-items: center;
+  border-top: 1px solid rgba(245,237,216,0.08);
+  flex-wrap: wrap; gap: 1rem;
+}
+.footer-logo {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 1.3rem; font-weight: 900; letter-spacing: 0.08em;
+}
+.footer-logo span { color: var(--fire); }
+footer p { font-size: 0.8rem; color: var(--text-muted); }
+
+/* ══════════════════════════════════
+   ORDER PAGE
+══════════════════════════════════ */
+.order-page { background: var(--earth); }
+.order-header {
+  background: var(--earth-mid); padding: 3rem 2.5rem;
+  border-bottom: 1px solid rgba(245,237,216,0.08);
+}
+.order-header h1 {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 3rem; font-weight: 900; text-transform: uppercase;
+}
+.order-header p { color: var(--text-muted); margin-top: 0.5rem; }
+
+/* Progress */
+.progress-bar {
+  display: flex; padding: 1.5rem 2.5rem;
+  background: var(--earth-mid);
+  border-bottom: 1px solid rgba(245,237,216,0.08);
+  gap: 0; overflow-x: auto;
+}
+.prog-step {
+  display: flex; align-items: center; flex: 1; min-width: 100px;
+}
+.prog-dot {
+  width: 28px; height: 28px; border-radius: 50%;
+  border: 2px solid rgba(245,237,216,0.2);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.75rem; font-weight: 700; flex-shrink: 0;
+  color: var(--text-muted); transition: all 0.3s;
+}
+.prog-dot.active { border-color: var(--fire); background: var(--fire); color: var(--white); }
+.prog-dot.done { border-color: var(--fire); background: var(--fire); color: var(--white); }
+.prog-label {
+  font-size: 0.72rem; font-weight: 600; text-transform: uppercase;
+  letter-spacing: 0.1em; color: var(--text-muted);
+  margin-left: 0.6rem; white-space: nowrap; transition: color 0.3s;
+}
+.prog-label.active { color: var(--cream); }
+.prog-line {
+  flex: 1; height: 1px; background: rgba(245,237,216,0.1);
+  margin: 0 0.8rem; min-width: 20px;
+}
+
+/* Order form container */
+.order-body { padding: 2.5rem; max-width: 800px; }
+.order-step { display: none; }
+.order-step.active { display: block; }
+
+/* Form elements */
+.form-group { margin-bottom: 1.5rem; }
+.form-label {
+  display: block; font-size: 0.78rem; font-weight: 600;
+  text-transform: uppercase; letter-spacing: 0.12em;
+  color: var(--text-muted); margin-bottom: 0.5rem;
+}
+.form-input, .form-select, .form-textarea {
+  width: 100%; padding: 0.85rem 1rem;
+  background: var(--earth-mid);
+  border: 1px solid rgba(245,237,216,0.12);
+  border-radius: 2px; color: var(--cream);
+  font-family: 'Barlow', sans-serif; font-size: 0.95rem;
+  transition: border-color 0.2s;
+}
+.form-input:focus, .form-select:focus, .form-textarea:focus {
+  outline: none; border-color: var(--fire);
+}
+.form-input::placeholder { color: var(--text-muted); }
+.form-select { appearance: none; cursor: pointer; }
+.form-select option { background: var(--earth-mid); }
+.form-textarea { resize: vertical; min-height: 100px; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+.form-error { font-size: 0.78rem; color: #ff6b6b; margin-top: 0.3rem; display: none; }
+.form-error.visible { display: block; }
+
+/* Step titles */
+.step-title {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 2rem; font-weight: 900; text-transform: uppercase;
+  margin-bottom: 0.5rem; color: var(--cream);
+}
+.step-desc { font-size: 0.9rem; color: var(--text-muted); margin-bottom: 2rem; line-height: 1.6; }
+
+/* Duration cards */
+.duration-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 2rem; }
+.duration-card {
+  border: 1.5px solid rgba(245,237,216,0.12);
+  border-radius: 2px; padding: 1.5rem;
+  cursor: pointer; transition: all 0.2s; position: relative;
+}
+.duration-card:hover { border-color: rgba(232,69,10,0.5); }
+.duration-card.selected { border-color: var(--fire); background: rgba(232,69,10,0.08); }
+.duration-card h3 {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 1.4rem; font-weight: 700; text-transform: uppercase; color: var(--cream);
+}
+.duration-card .price {
+  font-size: 0.85rem; color: var(--fire); font-weight: 600; margin-top: 0.3rem;
+}
+.duration-card .badge {
+  position: absolute; top: -8px; right: 1rem;
+  background: var(--gold); color: var(--earth);
+  font-size: 0.65rem; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.1em; padding: 0.2rem 0.6rem; border-radius: 2px;
+}
+
+/* Time slots */
+.slot-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.8rem; margin-bottom: 2rem; }
+.slot-card {
+  border: 1.5px solid rgba(245,237,216,0.12);
+  border-radius: 2px; padding: 1.2rem;
+  cursor: pointer; transition: all 0.2s;
+}
+.slot-card:hover:not(.full) { border-color: rgba(232,69,10,0.5); }
+.slot-card.selected { border-color: var(--fire); background: rgba(232,69,10,0.08); }
+.slot-card.full { opacity: 0.4; cursor: not-allowed; border-color: rgba(245,237,216,0.05); }
+.slot-time {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 1.5rem; font-weight: 700; color: var(--cream);
+}
+.slot-avail { font-size: 0.78rem; color: var(--text-muted); margin-top: 0.3rem; }
+.slot-dots { display: flex; gap: 4px; margin-top: 0.6rem; }
+.slot-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: rgba(245,237,216,0.15);
+}
+.slot-dot.taken { background: var(--fire); }
+
+/* Menu choice */
+.menu-choice { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 2rem; }
+.menu-option {
+  border: 1.5px solid rgba(245,237,216,0.12);
+  border-radius: 2px; padding: 1.5rem;
+  cursor: pointer; transition: all 0.2s;
+}
+.menu-option:hover { border-color: rgba(232,69,10,0.5); }
+.menu-option.selected { border-color: var(--fire); background: rgba(232,69,10,0.08); }
+.menu-option h3 {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 1.3rem; font-weight: 700; text-transform: uppercase; color: var(--cream);
+  margin-bottom: 0.4rem;
+}
+.menu-option p { font-size: 0.85rem; color: var(--text-muted); line-height: 1.5; }
+
+/* Day picker table */
+#day-picker { overflow-x: auto; margin-bottom: 2rem; }
+.day-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+.day-table th {
+  text-align: left; padding: 0.6rem 0.8rem;
+  font-size: 0.7rem; font-weight: 700; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--text-muted);
+  border-bottom: 1px solid rgba(245,237,216,0.08);
+}
+.day-table td {
+  padding: 0.5rem 0.8rem;
+  border-bottom: 1px solid rgba(245,237,216,0.05);
+}
+.day-table tr:hover td { background: rgba(245,237,216,0.02); }
+.day-date { color: var(--cream); font-weight: 500; font-size: 0.8rem; }
+.day-select {
+  background: var(--earth-mid); border: 1px solid rgba(245,237,216,0.12);
+  color: var(--cream); padding: 0.35rem 0.5rem;
+  font-family: 'Barlow', sans-serif; font-size: 0.8rem;
+  border-radius: 2px; width: 100%;
+}
+.day-select:focus { outline: none; border-color: var(--fire); }
+
+/* Summary box */
+.summary-box {
+  background: var(--earth-mid);
+  border: 1px solid rgba(245,237,216,0.08);
+  border-radius: 2px; padding: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+.summary-row {
+  display: flex; justify-content: space-between; align-items: baseline;
+  padding: 0.5rem 0; border-bottom: 1px solid rgba(245,237,216,0.05);
+  font-size: 0.9rem;
+}
+.summary-row:last-child { border-bottom: none; }
+.summary-row .key { color: var(--text-muted); }
+.summary-row .val { color: var(--cream); font-weight: 600; }
+.summary-row.total .key { color: var(--cream); font-weight: 700; font-size: 1rem; }
+.summary-row.total .val { color: var(--fire); font-size: 1.4rem; font-weight: 700; font-family: 'Barlow Condensed', sans-serif; }
+
+/* Step nav buttons */
+.step-nav {
+  display: flex; gap: 1rem; justify-content: space-between;
+  margin-top: 2rem; padding-top: 1.5rem;
+  border-top: 1px solid rgba(245,237,216,0.08);
+}
+.btn-back {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 0.95rem; font-weight: 700; letter-spacing: 0.1em;
+  text-transform: uppercase; background: transparent;
+  border: 1.5px solid rgba(245,237,216,0.15); color: var(--cream);
+  padding: 0.8rem 1.8rem; border-radius: 2px; cursor: pointer;
+  transition: all 0.2s;
+}
+.btn-back:hover { border-color: rgba(245,237,216,0.4); }
+.btn-next {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 0.95rem; font-weight: 700; letter-spacing: 0.1em;
+  text-transform: uppercase; background: var(--fire);
+  border: none; color: var(--white);
+  padding: 0.8rem 2.2rem; border-radius: 2px; cursor: pointer;
+  transition: all 0.2s;
+}
+.btn-next:hover { background: var(--fire-light); }
+
+/* Headcount input */
+.headcount-wrap {
+  display: flex; align-items: center; gap: 1rem; margin-bottom: 0.5rem;
+}
+.qty-btn {
+  width: 40px; height: 40px; border-radius: 2px;
+  border: 1.5px solid rgba(245,237,216,0.15);
+  background: transparent; color: var(--cream);
+  font-size: 1.2rem; cursor: pointer; transition: all 0.2s;
+  display: flex; align-items: center; justify-content: center;
+}
+.qty-btn:hover { border-color: var(--fire); color: var(--fire); }
+.qty-display {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 2rem; font-weight: 700; color: var(--cream);
+  min-width: 60px; text-align: center;
+}
+.qty-min-note { font-size: 0.78rem; color: var(--text-muted); }
+
+/* Success state */
+.success-screen {
+  text-align: center; padding: 4rem 2rem;
+}
+.success-icon {
+  width: 80px; height: 80px; border-radius: 50%;
+  background: rgba(232,69,10,0.15); border: 2px solid var(--fire);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 2rem; margin: 0 auto 2rem;
+}
+.success-screen h2 {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 2.5rem; font-weight: 900; text-transform: uppercase; margin-bottom: 1rem;
+}
+.success-screen p { color: var(--text-muted); max-width: 500px; margin: 0 auto 2rem; line-height: 1.6; }
+
+/* Info pill */
+.info-pill {
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  background: rgba(212,160,23,0.12); border: 1px solid rgba(212,160,23,0.3);
+  border-radius: 2px; padding: 0.5rem 1rem;
+  font-size: 0.8rem; color: var(--gold); margin-bottom: 1.5rem;
+}
+
+/* Admin page */
+.admin-section { padding: 2.5rem; max-width: 800px; }
+.admin-section h2 {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 1.8rem; font-weight: 900; text-transform: uppercase; margin-bottom: 1rem;
+}
+.admin-login { max-width: 400px; }
+.menu-editor { width: 100%; min-height: 300px; }
+.menu-category { margin-bottom: 2rem; }
+.category-title {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 1.1rem; font-weight: 700; text-transform: uppercase;
+  color: var(--fire); margin-bottom: 0.8rem;
+  padding-bottom: 0.5rem; border-bottom: 1px solid rgba(232,69,10,0.3);
+}
+.item-list { display: flex; flex-direction: column; gap: 0.4rem; }
+.item-row {
+  display: flex; gap: 0.5rem; align-items: center;
+}
+.item-input {
+  flex: 1; padding: 0.55rem 0.8rem;
+  background: var(--earth-mid); border: 1px solid rgba(245,237,216,0.1);
+  border-radius: 2px; color: var(--cream);
+  font-family: 'Barlow', sans-serif; font-size: 0.88rem;
+}
+.item-input:focus { outline: none; border-color: var(--fire); }
+.btn-remove {
+  background: none; border: none; color: var(--text-muted);
+  cursor: pointer; font-size: 1rem; padding: 0.3rem;
+  transition: color 0.2s;
+}
+.btn-remove:hover { color: #ff6b6b; }
+.btn-add-item {
+  background: none; border: 1px dashed rgba(245,237,216,0.15);
+  color: var(--text-muted); padding: 0.5rem 1rem;
+  border-radius: 2px; cursor: pointer; font-size: 0.82rem;
+  transition: all 0.2s; margin-top: 0.5rem; width: 100%;
+  font-family: 'Barlow', sans-serif;
+}
+.btn-add-item:hover { border-color: var(--fire); color: var(--fire); }
+
+/* Bookings table */
+.bookings-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; margin-top: 1rem; }
+.bookings-table th {
+  text-align: left; padding: 0.6rem 0.8rem;
+  font-size: 0.7rem; font-weight: 700; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--text-muted);
+  border-bottom: 1px solid rgba(245,237,216,0.08);
+}
+.bookings-table td {
+  padding: 0.7rem 0.8rem;
+  border-bottom: 1px solid rgba(245,237,216,0.05); color: var(--cream-dark);
+}
+.status-badge {
+  display: inline-block; padding: 0.2rem 0.6rem; border-radius: 2px;
+  font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em;
+}
+.status-pending { background: rgba(212,160,23,0.15); color: var(--gold); }
+.status-confirmed { background: rgba(50,200,100,0.12); color: #4ecb71; }
+
+@media (max-width: 700px) {
+  .hero-stats { display: none; }
+  .menu-grid { grid-template-columns: 1fr; }
+  .fuel-grid { grid-template-columns: 1fr; }
+  .stats-bar { grid-template-columns: 1fr 1fr; }
+  .form-row { grid-template-columns: 1fr; }
+  .duration-cards { grid-template-columns: 1fr; }
+  .menu-choice { grid-template-columns: 1fr; }
+  .slot-grid { grid-template-columns: 1fr; }
+  nav { padding: 1rem 1.2rem; }
+  .nav-links a:not(.nav-cta):not(:last-child) { display: none; }
+  section { padding: 3rem 1.2rem; }
+  .order-body { padding: 1.5rem 1.2rem; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAVIGATION -->
+<nav>
+  <div class="nav-logo">SKH<span>AF</span>TINI</div>
+  <div class="nav-links">
+    <a href="#" onclick="showPage('home')">Home</a>
+    <a href="#" onclick="showPage('order')" class="nav-cta">Order Now</a>
+  </div>
+</nav>
+
+<!-- ══════════════ HOME PAGE ══════════════ -->
+<div id="page-home" class="page active">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-grid"></div>
+    <div class="hero-content">
+      <div class="hero-eyebrow">JHB East Industrial Corridor</div>
+      <h1 class="hero-title">
+        We Grill,<br>
+        <span class="accent">You Chill.</span>
+      </h1>
+      <p class="hero-subtitle">
+        Hot, made-to-order kasi meals delivered to your factory gate — every weekday. Professional kitchen. Zero admin for your team.
+      </p>
+      <div class="hero-price-badge">
+        <span class="amount">R50</span>
+        <span class="label">per meal · delivery included</span>
+      </div>
+      <div class="hero-actions">
+        <button class="btn-primary" onclick="showPage('order')">Book Your Team's Meals</button>
+        <a href="#how" class="btn-secondary">See How It Works</a>
+      </div>
+    </div>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <div class="num">16–25%</div>
+        <div class="desc">Higher daily performance</div>
+      </div>
+      <div class="hero-stat">
+        <div class="num">40%</div>
+        <div class="desc">Reduction in staff churn</div>
+      </div>
+      <div class="hero-stat">
+        <div class="num">R0</div>
+        <div class="desc">Admin for your team</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section class="how-it-works" id="how">
+    <div class="section-label">How It Works</div>
+    <div class="section-title">Three steps.<br>That's it.</div>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">01</div>
+        <div class="step-icon">📋</div>
+        <h3>Book Online</h3>
+        <p>Choose your delivery slot, headcount, and monthly menu. Lock in your slot by paying in advance — no contracts required for your first month.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">02</div>
+        <div class="step-icon">🔥</div>
+        <h3>We Cook</h3>
+        <p>Fresh, hot meals prepared in our professional kitchen every morning. Kasi flavours, balanced portions, consistent quality — every single day.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">03</div>
+        <div class="step-icon">🚚</div>
+        <h3>Gate Delivery</h3>
+        <p>Your meals arrive at your gate during your chosen 30-minute slot. Your team eats, your supervisors stay on the floor. Done.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">04</div>
+        <div class="step-icon">📊</div>
+        <h3>Watch the Returns</h3>
+        <p>Fed teams focus. Productivity lifts. Churn drops. At R1,100/employee/month — you recover 20%+ more output from every person on your floor.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- STATS BAR -->
+  <div class="stats-bar">
+    <div class="stat-item">
+      <span class="stat-num">R50</span>
+      <span class="stat-desc">Per meal, all-inclusive</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-num">5+</span>
+      <span class="stat-desc">Minimum meals per order</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-num">4</span>
+      <span class="stat-desc">Daily delivery slots</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-num">0</span>
+      <span class="stat-desc">Admin for your team</span>
+    </div>
+  </div>
+
+  <!-- MENU -->
+  <section class="menu-section" id="menu">
+    <div class="section-label">The Menu</div>
+    <div class="section-title">Build your team's<br>daily plate.</div>
+    <p style="color:var(--text-muted);margin-top:0.5rem;max-width:520px;line-height:1.6;">Choose 1 starch + 1 protein + 1–2 veg each day. We rotate so your team never eats the same thing twice.</p>
+    <div class="menu-grid" id="home-menu-grid">
+      <!-- Populated by JS from menuData -->
+    </div>
+  </section>
+
+  <!-- FUEL -->
+  <section class="fuel-section">
+    <div class="section-label">The F.U.E.L. Framework</div>
+    <div class="section-title">Why fed teams<br>outperform.</div>
+    <div class="fuel-grid">
+      <div class="fuel-card">
+        <div class="fuel-letter">F</div>
+        <h3>Focus</h3>
+        <p>No vendor runs. No midday distractions. Food on-site means sharper minds and zero lunchtime logistics for supervisors. Workers stay on task, not on the road.</p>
+      </div>
+      <div class="fuel-card">
+        <div class="fuel-letter">U</div>
+        <h3>Unlock Productivity</h3>
+        <p>Eliminate 45–60 min vendor breaks. At R1,100/employee per month, you recover 20%+ more output from each person. You don't need more staff — you need the ones you have performing.</p>
+      </div>
+      <div class="fuel-card">
+        <div class="fuel-letter">E</div>
+        <h3>Energy</h3>
+        <p>Balanced meals sustain energy through the shift. The alternative — chips, cool drinks, pies from vendors — causes the 2pm crash your supervisors already know about. 20–25% fewer errors in afternoon shifts.</p>
+      </div>
+      <div class="fuel-card">
+        <div class="fuel-letter">L</div>
+        <h3>Loyalty</h3>
+        <p>Replacing a blue-collar worker costs 3–6 months of their salary. Meal benefits drive 20–40% reduction in staff churn — at R50/meal, the cheapest way to signal your team is valued.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-section">
+    <div style="position:relative">
+      <div class="section-label" style="justify-content:center">Ready?</div>
+      <div class="section-title">Your team is hungry.<br><span style="color:var(--fire)">Let's fix that.</span></div>
+      <p style="color:var(--text-muted);max-width:480px;margin:1rem auto 2rem;line-height:1.6;">
+        No contracts required for your first month. Run a 30-day trial. If you don't see improvement in energy, focus, or productivity — stop. That's how confident we are.
+      </p>
+      <button class="btn-primary" style="font-size:1.1rem;padding:1rem 2.5rem" onclick="showPage('order')">Book Your Meals Now</button>
+      <div class="cta-contact">
+        <div class="contact-item">📞 <strong>065 88 55 856</strong> — WhatsApp us</div>
+        <div class="contact-item">✉ <strong>orders@skhaftini.co.za</strong></div>
+        <div class="contact-item">📍 JHB East · Longmeadow · Edenvale · Bedfordview · Modderfontein</div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-logo">SKH<span>AF</span>TINI</div>
+    <p>We Grill, You Chill · JHB East Industrial Corridor</p>
+    <p style="font-size:0.75rem;color:var(--text-muted)">© 2026 Skhaftini</p>
+  </footer>
+</div>
+
+<!-- ══════════════ ORDER PAGE ══════════════ -->
+<div id="page-order" class="page order-page">
+  <div class="order-header">
+    <div class="section-label">Book Your Meals</div>
+    <h1>Start Your Order</h1>
+    <p>Minimum 5 meals per day · R50 per meal · Delivery included</p>
+  </div>
+
+  <div class="progress-bar" id="progress-bar">
+    <div class="prog-step">
+      <div class="prog-dot active" id="pd-1">1</div>
+      <span class="prog-label active" id="pl-1">Company</span>
+    </div>
+    <div class="prog-line"></div>
+    <div class="prog-step">
+      <div class="prog-dot" id="pd-2">2</div>
+      <span class="prog-label" id="pl-2">Duration & Slot</span>
+    </div>
+    <div class="prog-line"></div>
+    <div class="prog-step">
+      <div class="prog-dot" id="pd-3">3</div>
+      <span class="prog-label" id="pl-3">Menu</span>
+    </div>
+    <div class="prog-line"></div>
+    <div class="prog-step">
+      <div class="prog-dot" id="pd-4">4</div>
+      <span class="prog-label" id="pl-4">Headcount</span>
+    </div>
+    <div class="prog-line"></div>
+    <div class="prog-step">
+      <div class="prog-dot" id="pd-5">5</div>
+      <span class="prog-label" id="pl-5">Confirm</span>
+    </div>
+  </div>
+
+  <div class="order-body">
+
+    <!-- STEP 1: Company Details -->
+    <div class="order-step active" id="step-1">
+      <div class="step-title">Your Company Details</div>
+      <div class="step-desc">We'll use these for your invoice and delivery coordination.</div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Company Name *</label>
+          <input class="form-input" id="co-name" placeholder="Acme Manufacturing (Pty) Ltd">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Contact Person *</label>
+          <input class="form-input" id="co-contact" placeholder="Jane Smith">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Email Address *</label>
+          <input class="form-input" type="email" id="co-email" placeholder="jane@acme.co.za">
+          <div class="form-error" id="err-email">Please enter a valid email address</div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">WhatsApp Number</label>
+          <input class="form-input" id="co-whatsapp" placeholder="082 123 4567">
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Delivery Address *</label>
+        <input class="form-input" id="co-address" placeholder="12 Industrial Rd, Longmeadow, Edenvale, 1609">
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">VAT Number (optional)</label>
+          <input class="form-input" id="co-vat" placeholder="4123456789">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Purchase Order Number (optional)</label>
+          <input class="form-input" id="co-po" placeholder="PO-2026-001">
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Special Instructions / Comments</label>
+        <textarea class="form-textarea" id="co-comments" placeholder="Delivery gate code, allergies, specific instructions..."></textarea>
+      </div>
+      <div class="step-nav">
+        <div></div>
+        <button class="btn-next" onclick="nextStep(1)">Continue →</button>
+      </div>
+    </div>
+
+    <!-- STEP 2: Duration & Slot -->
+    <div class="order-step" id="step-2">
+      <div class="step-title">Duration & Delivery Slot</div>
+      <div class="step-desc">Choose how long you'd like to book, then lock in your preferred daily delivery time. Slots are shared — max 3 companies per slot.</div>
+
+      <div class="form-label" style="margin-bottom:0.8rem">Booking Duration</div>
+      <div class="duration-cards">
+        <div class="duration-card" id="dur-1" onclick="selectDuration(1)">
+          <h3>1 Month</h3>
+          <div class="price">Pay monthly · flexible</div>
+        </div>
+        <div class="duration-card" id="dur-3" onclick="selectDuration(3)">
+          <div class="badge">Priority Slot</div>
+          <h3>3 Months</h3>
+          <div class="price">Prepay · lock in your slot in advance</div>
+        </div>
+      </div>
+
+      <div class="form-label" style="margin-bottom:0.8rem">Preferred Delivery Slot</div>
+      <div class="slot-grid" id="slot-grid">
+        <!-- Populated by JS -->
+      </div>
+      <div class="form-error visible" id="err-slot" style="display:none">Please select a delivery slot</div>
+
+      <div class="step-nav">
+        <button class="btn-back" onclick="prevStep(2)">← Back</button>
+        <button class="btn-next" onclick="nextStep(2)">Continue →</button>
+      </div>
+    </div>
+
+    <!-- STEP 3: Menu Choice -->
+    <div class="order-step" id="step-3">
+      <div class="step-title">Your Monthly Menu</div>
+      <div class="step-desc">Choose each day manually or let us randomise a balanced monthly rotation so your team never eats the same thing twice.</div>
+
+      <div class="menu-choice">
+        <div class="menu-option" id="menu-opt-random" onclick="selectMenuMode('random')">
+          <h3>🎲 Randomise It</h3>
+          <p>We'll build a balanced monthly rotation from all available options. Varied, nutritious, zero effort from you.</p>
+        </div>
+        <div class="menu-option" id="menu-opt-pick" onclick="selectMenuMode('pick')">
+          <h3>📋 I'll Choose</h3>
+          <p>Pick starch, protein, and veg for each weekday yourself. Full control over what your team eats each day.</p>
+        </div>
+      </div>
+
+      <div id="day-picker" style="display:none">
+        <div class="info-pill">ℹ️ Select starch, protein, and vegetables for each weekday</div>
+        <table class="day-table" id="day-table">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Starch</th>
+              <th>Protein</th>
+              <th>Veg 1</th>
+              <th>Veg 2 (optional)</th>
+            </tr>
+          </thead>
+          <tbody id="day-table-body"></tbody>
+        </table>
+      </div>
+
+      <div class="step-nav">
+        <button class="btn-back" onclick="prevStep(3)">← Back</button>
+        <button class="btn-next" onclick="nextStep(3)">Continue →</button>
+      </div>
+    </div>
+
+    <!-- STEP 4: Headcount -->
+    <div class="order-step" id="step-4">
+      <div class="step-title">Daily Headcount</div>
+      <div class="step-desc">How many meals do you need delivered each day? Minimum 5 meals per delivery.</div>
+
+      <div class="headcount-wrap">
+        <button class="qty-btn" onclick="changeQty(-1)">−</button>
+        <div class="qty-display" id="qty-display">10</div>
+        <button class="qty-btn" onclick="changeQty(1)">+</button>
+        <span style="color:var(--text-muted);font-size:0.9rem">meals per day</span>
+      </div>
+      <div class="qty-min-note">Minimum 5 meals per delivery day</div>
+
+      <div class="summary-box" id="cost-preview" style="margin-top:2rem">
+        <div class="summary-row">
+          <span class="key">Meals per day</span>
+          <span class="val" id="sv-qty">10</span>
+        </div>
+        <div class="summary-row">
+          <span class="key">Working days</span>
+          <span class="val" id="sv-days">—</span>
+        </div>
+        <div class="summary-row">
+          <span class="key">Rate per meal</span>
+          <span class="val">R50.00</span>
+        </div>
+        <div class="summary-row total">
+          <span class="key">Estimated Total</span>
+          <span class="val" id="sv-total">—</span>
+        </div>
+      </div>
+
+      <div class="step-nav">
+        <button class="btn-back" onclick="prevStep(4)">← Back</button>
+        <button class="btn-next" onclick="nextStep(4)">Review & Confirm →</button>
+      </div>
+    </div>
+
+    <!-- STEP 5: Confirm -->
+    <div class="order-step" id="step-5">
+      <div class="step-title">Review Your Order</div>
+      <div class="step-desc">Check everything below, then confirm to generate and send your invoice.</div>
+
+      <div class="summary-box" id="final-summary">
+        <!-- Populated by JS -->
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Bank Details for Payment</label>
+        <div style="background:var(--earth-mid);border:1px solid rgba(245,237,216,0.08);border-radius:2px;padding:1rem;font-size:0.88rem;color:var(--cream-dark);line-height:1.9;">
+          <strong style="color:var(--cream)">Skhaftini</strong><br>
+          Bank: <strong style="color:var(--cream)">FNB</strong><br>
+          Account: <strong style="color:var(--cream)">62XXXXXXXXX</strong> <span style="color:var(--text-muted)">(update in admin)</span><br>
+          Branch: <strong style="color:var(--cream)">250655</strong><br>
+          Reference: <strong style="color:var(--fire)" id="payment-ref">SKH-XXXX</strong>
+        </div>
+      </div>
+
+      <div class="info-pill">
+        📧 Your invoice will be emailed to you and WhatsApp confirmation sent to Skhaftini
+      </div>
+
+      <div class="step-nav">
+        <button class="btn-back" onclick="prevStep(5)">← Back</button>
+        <button class="btn-next" id="confirm-btn" onclick="confirmOrder()" style="background:var(--gold);color:var(--earth)">✓ Confirm & Send Invoice</button>
+      </div>
+    </div>
+
+    <!-- SUCCESS -->
+    <div class="order-step" id="step-success">
+      <div class="success-screen">
+        <div class="success-icon">✓</div>
+        <h2>Order Confirmed!</h2>
+        <p id="success-msg">Your invoice has been generated and emailed to you. Skhaftini has been notified via WhatsApp. We'll be in touch to confirm your first delivery date.</p>
+        <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap">
+          <button class="btn-primary" onclick="downloadInvoice()">📄 Download Invoice PDF</button>
+          <button class="btn-secondary" onclick="showPage('home')">Back to Home</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══════════════ ADMIN PAGE ══════════════ -->
+<div id="page-admin" class="page">
+  <div class="order-header">
+    <div class="section-label">Admin Panel</div>
+    <h1>Skhaftini Admin</h1>
+    <p>Manage menu, slots, and bookings</p>
+  </div>
+
+  <div class="admin-section" id="admin-login-section">
+    <div class="admin-login">
+      <h2>Admin Login</h2>
+      <div class="form-group" style="margin-top:1.5rem">
+        <label class="form-label">Password</label>
+        <input class="form-input" type="password" id="admin-pass" placeholder="Enter admin password" onkeydown="if(event.key==='Enter')adminLogin()">
+      </div>
+      <button class="btn-next" onclick="adminLogin()">Login →</button>
+      <div class="form-error" id="admin-err" style="margin-top:0.5rem">Incorrect password</div>
+    </div>
+  </div>
+
+  <div class="admin-section" id="admin-panel" style="display:none;max-width:900px">
+
+    <!-- Menu Editor -->
+    <h2>Menu Editor</h2>
+    <p style="color:var(--text-muted);margin-bottom:2rem;font-size:0.9rem">Edit your menu items below. Changes apply immediately to the order form.</p>
+
+    <div id="menu-editor-ui"></div>
+    <button class="btn-next" onclick="saveMenu()" style="margin-top:1rem">Save Menu</button>
+
+    <!-- Slot Settings -->
+    <h2 style="margin-top:3rem">Slot Bookings</h2>
+    <p style="color:var(--text-muted);margin-bottom:1rem;font-size:0.9rem">Current slot availability (max 3 per slot). Edit counts to reflect actual bookings.</p>
+    <div id="slot-admin-ui"></div>
+    <button class="btn-next" onclick="saveSlots()" style="margin-top:1rem">Save Slot Settings</button>
+
+    <!-- Bookings -->
+    <h2 style="margin-top:3rem">All Bookings</h2>
+    <div style="overflow-x:auto">
+      <table class="bookings-table" id="bookings-table">
+        <thead>
+          <tr>
+            <th>Ref</th><th>Company</th><th>Email</th><th>Headcount</th><th>Slot</th><th>Duration</th><th>Total</th><th>Status</th>
+          </tr>
+        </thead>
+        <tbody id="bookings-body">
+          <tr><td colspan="8" style="color:var(--text-muted);padding:2rem;text-align:center">No bookings yet</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Bank Details -->
+    <h2 style="margin-top:3rem">Bank Details (for invoices)</h2>
+    <div class="form-row" style="margin-top:1rem">
+      <div class="form-group">
+        <label class="form-label">Account Name</label>
+        <input class="form-input" id="bank-name" value="Skhaftini">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Bank</label>
+        <input class="form-input" id="bank-bank" value="FNB">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Account Number</label>
+        <input class="form-input" id="bank-acc" value="62XXXXXXXXX">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Branch Code</label>
+        <input class="form-input" id="bank-branch" value="250655">
+      </div>
+    </div>
+    <button class="btn-next" onclick="saveBankDetails()" style="margin-top:0.5rem">Save Bank Details</button>
+
+    <div style="margin-top:3rem;padding-top:2rem;border-top:1px solid rgba(245,237,216,0.08)">
+      <button class="btn-back" onclick="adminLogout()">Log Out</button>
+    </div>
+  </div>
+</div>
+
+<!-- Hidden invoice template for PDF generation -->
+<div id="invoice-template" style="display:none"></div>
+
+<script>
+// ══════════════════════════════════
+// DATA
+// ══════════════════════════════════
+const DEFAULT_MENU = {
+  starch: ['Pap','Rice','Creamy Mash','Samp','Baked Potato','Potato Wedges'],
+  protein: ['Beef Steak Slice','2-Piece Chicken','Boerewors / Wors Stew','Beef Stew','Pork Chop'],
+  veg: ['Chakalaka','Cabbage','Spinach','Coleslaw','Beetroot Salad']
+};
+
+const DEFAULT_SLOTS = [
+  { time: '10:30–11:00', taken: 0 },
+  { time: '11:00–11:30', taken: 0 },
+  { time: '11:30–12:00', taken: 0 },
+  { time: '12:00–12:30', taken: 0 }
+];
+
+const ADMIN_PASSWORD = 'skhaftini2026';
+const PRICE_PER_MEAL = 50;
+const MIN_MEALS = 5;
+const MAX_PER_SLOT = 3;
+
+// State
+let menuData = JSON.parse(localStorage.getItem('skh_menu') || 'null') || DEFAULT_MENU;
+let slotsData = JSON.parse(localStorage.getItem('skh_slots') || 'null') || DEFAULT_SLOTS;
+let bankDetails = JSON.parse(localStorage.getItem('skh_bank') || 'null') || { name:'Skhaftini', bank:'FNB', acc:'62XXXXXXXXX', branch:'250655' };
+let bookings = JSON.parse(localStorage.getItem('skh_bookings') || '[]');
+
+let order = {
+  company: {}, duration: 1, slot: null, menuMode: 'random',
+  dayMenus: {}, headcount: 10, ref: ''
+};
+let currentStep = 1;
+
+// ══════════════════════════════════
+// PAGE NAVIGATION
+// ══════════════════════════════════
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
+  window.scrollTo(0,0);
+  if (id === 'order') { currentStep = 1; renderStep(1); renderSlots(); }
+  if (id === 'home') renderHomeMenu();
+}
+
+// secret admin: type /admin in console
+window.goAdmin = () => showPage('admin');
+
+// ══════════════════════════════════
+// HOME MENU RENDER
+// ══════════════════════════════════
+function renderHomeMenu() {
+  const g = document.getElementById('home-menu-grid');
+  if (!g) return;
+  const cats = [['Starch','starch'],['Protein','protein'],['Vegetables','veg']];
+  g.innerHTML = cats.map(([label, key]) => `
+    <div class="menu-col">
+      <div class="menu-col-title">${label}</div>
+      ${menuData[key].map(i => `<div class="menu-item">${i}</div>`).join('')}
+    </div>
+  `).join('');
+}
+renderHomeMenu();
+
+// ══════════════════════════════════
+// ORDER FLOW
+// ══════════════════════════════════
+function renderStep(n) {
+  document.querySelectorAll('.order-step').forEach(s => s.classList.remove('active'));
+  document.getElementById('step-' + (n === 'success' ? 'success' : n)).classList.add('active');
+
+  for (let i = 1; i <= 5; i++) {
+    const dot = document.getElementById('pd-' + i);
+    const lbl = document.getElementById('pl-' + i);
+    dot.className = 'prog-dot' + (i < n ? ' done' : i === n ? ' active' : '');
+    dot.textContent = i < n ? '✓' : i;
+    lbl.className = 'prog-label' + (i === n ? ' active' : '');
+  }
+  currentStep = n;
+  window.scrollTo(0,0);
+}
+
+function nextStep(from) {
+  if (from === 1) {
+    if (!validateStep1()) return;
+  }
+  if (from === 2) {
+    if (!order.duration) { alert('Please select a booking duration'); return; }
+    if (order.slot === null) { document.getElementById('err-slot').style.display='block'; return; }
+    document.getElementById('err-slot').style.display='none';
+  }
+  if (from === 3) {
+    if (!order.menuMode) { alert('Please select a menu option'); return; }
+    if (order.menuMode === 'pick') generateDayTableIfNeeded();
+  }
+  if (from === 4) { buildFinalSummary(); }
+
+  renderStep(from + 1);
+  updateCostPreview();
+}
+
+function prevStep(from) { renderStep(from - 1); }
+
+// Step 1 validation
+function validateStep1() {
+  const fields = ['co-name','co-email','co-address','co-contact'];
+  let ok = true;
+  fields.forEach(id => {
+    const el = document.getElementById(id);
+    if (!el.value.trim()) { el.style.borderColor='#ff6b6b'; ok=false; }
+    else el.style.borderColor='';
+  });
+  const email = document.getElementById('co-email').value;
+  if (ok && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    document.getElementById('err-email').classList.add('visible');
+    ok = false;
+  } else { document.getElementById('err-email').classList.remove('visible'); }
+  if (ok) {
+    order.company = {
+      name: document.getElementById('co-name').value.trim(),
+      contact: document.getElementById('co-contact').value.trim(),
+      email: document.getElementById('co-email').value.trim(),
+      whatsapp: document.getElementById('co-whatsapp').value.trim(),
+      address: document.getElementById('co-address').value.trim(),
+      vat: document.getElementById('co-vat').value.trim(),
+      po: document.getElementById('co-po').value.trim(),
+      comments: document.getElementById('co-comments').value.trim()
+    };
+  }
+  return ok;
+}
+
+// Duration
+function selectDuration(months) {
+  order.duration = months;
+  document.querySelectorAll('.duration-card').forEach(c => c.classList.remove('selected'));
+  document.getElementById('dur-' + months).classList.add('selected');
+  updateCostPreview();
+}
+
+// Slots
+function renderSlots() {
+  const g = document.getElementById('slot-grid');
+  if (!g) return;
+  g.innerHTML = slotsData.map((s, i) => {
+    const full = s.taken >= MAX_PER_SLOT;
+    const dots = Array.from({length:3}, (_,d) => `<div class="slot-dot${d<s.taken?' taken':''}"></div>`).join('');
+    return `
+      <div class="slot-card${full?' full':''}${order.slot===i?' selected':''}" onclick="${full?'':'selectSlot('+i+')'}">
+        <div class="slot-time">${s.time}</div>
+        <div class="slot-avail">${full ? 'Fully booked' : (MAX_PER_SLOT - s.taken) + ' spot' + (MAX_PER_SLOT - s.taken===1?'':'s') + ' available'}</div>
+        <div class="slot-dots">${dots}</div>
+      </div>`;
+  }).join('');
+}
+
+function selectSlot(i) {
+  if (slotsData[i].taken >= MAX_PER_SLOT) return;
+  order.slot = i;
+  renderSlots();
+}
+
+// Menu mode
+function selectMenuMode(mode) {
+  order.menuMode = mode;
+  document.querySelectorAll('.menu-option').forEach(o => o.classList.remove('selected'));
+  document.getElementById('menu-opt-' + mode).classList.add('selected');
+  const picker = document.getElementById('day-picker');
+  if (mode === 'pick') { picker.style.display = 'block'; buildDayTable(); }
+  else picker.style.display = 'none';
+}
+
+function getWorkingDays(months) {
+  const days = [];
+  const now = new Date();
+  const start = new Date(now.getFullYear(), now.getMonth() + 1, 1);
+  const end = new Date(start.getFullYear(), start.getMonth() + months, 0);
+  for (let d = new Date(start); d <= end; d.setDate(d.getDate()+1)) {
+    const dow = d.getDay();
+    if (dow !== 0 && dow !== 6) days.push(new Date(d));
+  }
+  return days;
+}
+
+function buildDayTable() {
+  const months = order.duration || 1;
+  const days = getWorkingDays(months);
+  const tbody = document.getElementById('day-table-body');
+  const makeSelect = (key, dayIdx) => `
+    <select class="day-select" onchange="order.dayMenus[${dayIdx}]=order.dayMenus[${dayIdx}]||{}; order.dayMenus[${dayIdx}]['${key}']=this.value">
+      <option value="">— Select —</option>
+      ${menuData[key].map(i => `<option>${i}</option>`).join('')}
+    </select>`;
+  tbody.innerHTML = days.map((d,i) => `
+    <tr>
+      <td class="day-date">${d.toLocaleDateString('en-ZA',{weekday:'short',day:'numeric',month:'short'})}</td>
+      <td>${makeSelect('starch',i)}</td>
+      <td>${makeSelect('protein',i)}</td>
+      <td>${makeSelect('veg',i)}</td>
+      <td>${makeSelect('veg',i+1000)}</td>
+    </tr>`).join('');
+}
+
+function generateDayTableIfNeeded() {
+  if (!document.getElementById('day-table-body').children.length) buildDayTable();
+}
+
+// Headcount
+function changeQty(delta) {
+  let q = order.headcount + delta;
+  if (q < MIN_MEALS) q = MIN_MEALS;
+  if (q > 999) q = 999;
+  order.headcount = q;
+  document.getElementById('qty-display').textContent = q;
+  updateCostPreview();
+}
+
+function getWorkingDayCount() {
+  return getWorkingDays(order.duration || 1).length;
+}
+
+function updateCostPreview() {
+  const days = getWorkingDayCount();
+  const total = order.headcount * PRICE_PER_MEAL * days;
+  const sv = document.getElementById('sv-qty');
+  const sd = document.getElementById('sv-days');
+  const st = document.getElementById('sv-total');
+  if (sv) sv.textContent = order.headcount;
+  if (sd) sd.textContent = days + ' days';
+  if (st) st.textContent = 'R' + total.toLocaleString('en-ZA', {minimumFractionDigits:2});
+}
+
+function buildFinalSummary() {
+  const days = getWorkingDayCount();
+  const total = order.headcount * PRICE_PER_MEAL * days;
+  const ref = 'SKH-' + Date.now().toString(36).toUpperCase().slice(-6);
+  order.ref = ref;
+  document.getElementById('payment-ref').textContent = ref;
+
+  document.getElementById('final-summary').innerHTML = `
+    <div class="summary-row"><span class="key">Reference</span><span class="val" style="color:var(--fire)">${ref}</span></div>
+    <div class="summary-row"><span class="key">Company</span><span class="val">${order.company.name}</span></div>
+    <div class="summary-row"><span class="key">Contact</span><span class="val">${order.company.contact}</span></div>
+    <div class="summary-row"><span class="key">Delivery Address</span><span class="val">${order.company.address}</span></div>
+    <div class="summary-row"><span class="key">Invoice Email</span><span class="val">${order.company.email}</span></div>
+    <div class="summary-row"><span class="key">Duration</span><span class="val">${order.duration} Month${order.duration>1?'s':''}</span></div>
+    <div class="summary-row"><span class="key">Delivery Slot</span><span class="val">${slotsData[order.slot].time}</span></div>
+    <div class="summary-row"><span class="key">Menu</span><span class="val">${order.menuMode === 'random' ? 'Randomised rotation' : 'Custom daily picks'}</span></div>
+    <div class="summary-row"><span class="key">Meals per day</span><span class="val">${order.headcount}</span></div>
+    <div class="summary-row"><span class="key">Working days</span><span class="val">${days}</span></div>
+    <div class="summary-row"><span class="key">Rate</span><span class="val">R${PRICE_PER_MEAL.toFixed(2)}/meal</span></div>
+    ${order.company.vat ? `<div class="summary-row"><span class="key">VAT Number</span><span class="val">${order.company.vat}</span></div>` : ''}
+    ${order.company.po ? `<div class="summary-row"><span class="key">PO Number</span><span class="val">${order.company.po}</span></div>` : ''}
+    <div class="summary-row total"><span class="key">Total Due</span><span class="val">R${total.toLocaleString('en-ZA',{minimumFractionDigits:2})}</span></div>
+  `;
+}
+
+// ══════════════════════════════════
+// CONFIRM ORDER
+// ══════════════════════════════════
+function confirmOrder() {
+  const btn = document.getElementById('confirm-btn');
+  btn.textContent = 'Processing...'; btn.disabled = true;
+
+  const days = getWorkingDayCount();
+  const total = order.headcount * PRICE_PER_MEAL * days;
+  const booking = { ...order.company, ref: order.ref, duration: order.duration, slot: slotsData[order.slot].time, headcount: order.headcount, days, total, menuMode: order.menuMode, date: new Date().toISOString(), status: 'pending' };
+
+  // Save booking
+  bookings.push(booking);
+  localStorage.setItem('skh_bookings', JSON.stringify(bookings));
+
+  // Update slot count
+  slotsData[order.slot].taken = Math.min(slotsData[order.slot].taken + 1, MAX_PER_SLOT);
+  localStorage.setItem('skh_slots', JSON.stringify(slotsData));
+
+  // Generate invoice data
+  generateInvoicePDF(booking);
+
+  // WhatsApp notification
+  const waMsg = encodeURIComponent(
+    `🍽️ *New Skhaftini Order* — ${order.ref}\n\n` +
+    `*Company:* ${booking.name}\n*Contact:* ${booking.contact}\n*Email:* ${booking.email}\n` +
+    `*Slot:* ${booking.slot}\n*Headcount:* ${booking.headcount} meals/day\n` +
+    `*Duration:* ${booking.duration} month(s)\n*Total:* R${total.toLocaleString('en-ZA',{minimumFractionDigits:2})}\n*Address:* ${booking.address}` +
+    (booking.comments ? `\n*Notes:* ${booking.comments}` : '')
+  );
+  setTimeout(() => {
+    window.open(`https://wa.me/27658855856?text=${waMsg}`, '_blank');
+  }, 800);
+
+  // Show email simulation (in production use EmailJS)
+  setTimeout(() => {
+    btn.textContent = '✓ Confirmed';
+    document.getElementById('success-msg').textContent =
+      `Your invoice (${order.ref}) has been generated — click below to download it. A WhatsApp notification has been sent to Skhaftini. They'll confirm your first delivery date within 24 hours.`;
+    renderStep('success');
+    // Open WhatsApp
+  }, 1200);
+}
+
+// ══════════════════════════════════
+// INVOICE PDF GENERATION
+// ══════════════════════════════════
+function generateInvoicePDF(b) {
+  // Store for download
+  window._lastInvoice = b;
+}
+
+function downloadInvoice() {
+  const b = window._lastInvoice;
+  if (!b) return;
+  const bank = bankDetails;
+  const invoiceDate = new Date().toLocaleDateString('en-ZA',{year:'numeric',month:'long',day:'numeric'});
+  const dueDate = new Date(Date.now() + 5*24*60*60*1000).toLocaleDateString('en-ZA',{year:'numeric',month:'long',day:'numeric'});
+  const subtotal = b.headcount * PRICE_PER_MEAL * b.days;
+  const vat = subtotal * 0.15;
+  const total = subtotal + vat;
+
+  const html = `<!DOCTYPE html><html><head><meta charset="UTF-8">
+  <style>
+    body{font-family:Arial,sans-serif;font-size:12px;color:#1A1208;margin:0;padding:40px;background:#fff}
+    .header{display:flex;justify-content:space-between;margin-bottom:40px}
+    .logo{font-size:28px;font-weight:900;letter-spacing:3px;color:#E8450A}
+    .logo span{color:#1A1208}
+    h2{font-size:22px;color:#1A1208;margin:0 0 4px}
+    .meta{color:#666;font-size:11px}
+    table{width:100%;border-collapse:collapse;margin:20px 0}
+    th{background:#1A1208;color:#F5EDD8;padding:8px 12px;text-align:left;font-size:11px;letter-spacing:1px;text-transform:uppercase}
+    td{padding:8px 12px;border-bottom:1px solid #eee}
+    .total-row td{border-top:2px solid #1A1208;font-weight:700;font-size:14px;color:#E8450A}
+    .vat-row td{color:#666}
+    .section{margin-top:30px}
+    .section h3{font-size:11px;text-transform:uppercase;letter-spacing:2px;color:#666;margin-bottom:8px}
+    .bank-box{background:#F5EDD8;padding:16px;border-radius:4px;line-height:2}
+    .ref{font-size:18px;font-weight:700;color:#E8450A}
+    .footer{margin-top:40px;padding-top:20px;border-top:1px solid #eee;color:#666;font-size:10px;text-align:center}
+    .badge{display:inline-block;background:#E8450A;color:#fff;padding:3px 10px;border-radius:2px;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase}
+  </style>
+  </head><body>
+  <div class="header">
+    <div>
+      <div class="logo">SKH<span>AF</span>TINI</div>
+      <div class="meta" style="margin-top:6px">We Grill, You Chill<br>orders@skhaftini.co.za · 065 88 55 856<br>JHB East Industrial Corridor</div>
+    </div>
+    <div style="text-align:right">
+      <h2>TAX INVOICE</h2>
+      <div class="ref">${b.ref}</div>
+      <div class="meta">Date: ${invoiceDate}<br>Due: ${dueDate}<br><span class="badge">Payment Due in 5 Days</span></div>
+    </div>
+  </div>
+
+  <div style="display:flex;gap:40px;margin-bottom:30px">
+    <div class="section" style="flex:1">
+      <h3>Bill To</h3>
+      <strong>${b.name}</strong><br>${b.contact}<br>${b.address}<br>${b.email}
+      ${b.vat ? `<br>VAT: ${b.vat}` : ''}
+      ${b.po ? `<br>PO: ${b.po}` : ''}
+    </div>
+    <div class="section" style="flex:1">
+      <h3>Order Details</h3>
+      <table style="margin:0"><tbody>
+        <tr><td style="border:none;padding:2px 8px 2px 0;color:#666">Slot</td><td style="border:none;padding:2px 0">${b.slot}</td></tr>
+        <tr><td style="border:none;padding:2px 8px 2px 0;color:#666">Duration</td><td style="border:none;padding:2px 0">${b.duration} month(s)</td></tr>
+        <tr><td style="border:none;padding:2px 8px 2px 0;color:#666">Menu</td><td style="border:none;padding:2px 0">${b.menuMode === 'random' ? 'Randomised rotation' : 'Custom'}</td></tr>
+        ${b.comments ? `<tr><td style="border:none;padding:2px 8px 2px 0;color:#666">Notes</td><td style="border:none;padding:2px 0">${b.comments}</td></tr>` : ''}
+      </tbody></table>
+    </div>
+  </div>
+
+  <table>
+    <thead><tr><th>Description</th><th>Qty</th><th>Days</th><th>Rate</th><th style="text-align:right">Amount</th></tr></thead>
+    <tbody>
+      <tr>
+        <td>Hot meals — gate delivery<br><small style="color:#666">Kasi-style hot meals, daily delivery to gate during booked slot</small></td>
+        <td>${b.headcount} meals/day</td>
+        <td>${b.days} days</td>
+        <td>R${PRICE_PER_MEAL.toFixed(2)}</td>
+        <td style="text-align:right">R${subtotal.toLocaleString('en-ZA',{minimumFractionDigits:2})}</td>
+      </tr>
+      <tr class="vat-row"><td colspan="4" style="text-align:right">Subtotal</td><td style="text-align:right">R${subtotal.toLocaleString('en-ZA',{minimumFractionDigits:2})}</td></tr>
+      <tr class="vat-row"><td colspan="4" style="text-align:right">VAT (15%)</td><td style="text-align:right">R${vat.toLocaleString('en-ZA',{minimumFractionDigits:2})}</td></tr>
+      <tr class="total-row"><td colspan="4" style="text-align:right">TOTAL DUE</td><td style="text-align:right">R${total.toLocaleString('en-ZA',{minimumFractionDigits:2})}</td></tr>
+    </tbody>
+  </table>
+
+  <div class="section">
+    <h3>Payment Details</h3>
+    <div class="bank-box">
+      <strong>${bank.name}</strong> &nbsp;|&nbsp; ${bank.bank} &nbsp;|&nbsp;
+      Account: <strong>${bank.acc}</strong> &nbsp;|&nbsp; Branch: <strong>${bank.branch}</strong><br>
+      <strong>Reference: ${b.ref}</strong> — please use this reference when making payment.
+    </div>
+  </div>
+
+  <div class="footer">
+    Skhaftini · We Grill, You Chill · JHB East Industrial Corridor · orders@skhaftini.co.za · 065 88 55 856<br>
+    This invoice was auto-generated. For queries contact us on WhatsApp.
+  </div>
+  </body></html>`;
+
+  const blob = new Blob([html], {type:'text/html'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = `Skhaftini-Invoice-${b.ref}.html`;
+  a.click(); URL.revokeObjectURL(url);
+}
+
+// ══════════════════════════════════
+// ADMIN
+// ══════════════════════════════════
+function adminLogin() {
+  const pass = document.getElementById('admin-pass').value;
+  if (pass === ADMIN_PASSWORD) {
+    document.getElementById('admin-login-section').style.display = 'none';
+    document.getElementById('admin-panel').style.display = 'block';
+    renderMenuEditor();
+    renderSlotAdmin();
+    renderBookingsTable();
+    loadBankDetails();
+  } else {
+    document.getElementById('admin-err').style.display = 'block';
+  }
+}
+function adminLogout() {
+  document.getElementById('admin-login-section').style.display = 'block';
+  document.getElementById('admin-panel').style.display = 'none';
+  document.getElementById('admin-pass').value = '';
+}
+
+function renderMenuEditor() {
+  const cats = [['Starch','starch'],['Protein','protein'],['Vegetables','veg']];
+  document.getElementById('menu-editor-ui').innerHTML = cats.map(([label, key]) => `
+    <div class="menu-category">
+      <div class="category-title">${label}</div>
+      <div class="item-list" id="list-${key}">
+        ${menuData[key].map((item,i) => `
+          <div class="item-row" id="row-${key}-${i}">
+            <input class="item-input" value="${item}" data-key="${key}" data-idx="${i}" onchange="menuData['${key}'][${i}]=this.value">
+            <button class="btn-remove" onclick="removeMenuItem('${key}',${i})">✕</button>
+          </div>`).join('')}
+      </div>
+      <button class="btn-add-item" onclick="addMenuItem('${key}')">+ Add ${label} Item</button>
+    </div>`).join('');
+}
+
+function addMenuItem(key) {
+  menuData[key].push('New item');
+  renderMenuEditor();
+}
+function removeMenuItem(key, idx) {
+  menuData[key].splice(idx, 1);
+  renderMenuEditor();
+}
+function saveMenu() {
+  localStorage.setItem('skh_menu', JSON.stringify(menuData));
+  renderHomeMenu();
+  alert('Menu saved successfully!');
+}
+
+function renderSlotAdmin() {
+  document.getElementById('slot-admin-ui').innerHTML = `
+    <table class="bookings-table">
+      <thead><tr><th>Slot</th><th>Bookings Taken (of 3)</th></tr></thead>
+      <tbody>
+        ${slotsData.map((s,i) => `
+          <tr>
+            <td>${s.time}</td>
+            <td><input type="number" min="0" max="3" value="${s.taken}" class="form-input" style="width:80px;padding:0.4rem 0.6rem" onchange="slotsData[${i}].taken=Math.min(3,Math.max(0,parseInt(this.value)||0))"></td>
+          </tr>`).join('')}
+      </tbody>
+    </table>`;
+}
+function saveSlots() {
+  localStorage.setItem('skh_slots', JSON.stringify(slotsData));
+  renderSlots();
+  alert('Slot settings saved!');
+}
+
+function renderBookingsTable() {
+  const tbody = document.getElementById('bookings-body');
+  if (!bookings.length) { tbody.innerHTML = '<tr><td colspan="8" style="color:var(--text-muted);padding:2rem;text-align:center">No bookings yet</td></tr>'; return; }
+  tbody.innerHTML = bookings.map(b => `
+    <tr>
+      <td style="color:var(--fire);font-weight:700">${b.ref}</td>
+      <td>${b.name}</td>
+      <td>${b.email}</td>
+      <td>${b.headcount}</td>
+      <td>${b.slot}</td>
+      <td>${b.duration}m</td>
+      <td>R${(b.headcount*50*b.days).toLocaleString('en-ZA',{minimumFractionDigits:2})}</td>
+      <td><span class="status-badge status-${b.status||'pending'}">${b.status||'pending'}</span></td>
+    </tr>`).join('');
+}
+
+function loadBankDetails() {
+  document.getElementById('bank-name').value = bankDetails.name;
+  document.getElementById('bank-bank').value = bankDetails.bank;
+  document.getElementById('bank-acc').value = bankDetails.acc;
+  document.getElementById('bank-branch').value = bankDetails.branch;
+}
+function saveBankDetails() {
+  bankDetails = {
+    name: document.getElementById('bank-name').value,
+    bank: document.getElementById('bank-bank').value,
+    acc: document.getElementById('bank-acc').value,
+    branch: document.getElementById('bank-branch').value
+  };
+  localStorage.setItem('skh_bank', JSON.stringify(bankDetails));
+  alert('Bank details saved!');
+}
+
+// Init cost preview
+updateCostPreview();
+
+// Secret admin access
+document.addEventListener('keydown', e => {
+  if (e.key === '`' && e.ctrlKey) showPage('admin');
+});
+</script>
+</body>
+</html>
